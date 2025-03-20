@@ -1,5 +1,7 @@
 # CompileOnLinux
 
+This idea comes from [this repository](https://github.com/casey-SK/helloWorld-deb-rpm-flatpak-appImage) from [casey-SK](https://github.com/casey-SK)
+
 Right now, this repo is only for one of my projet : `MyGesClient`.
 Later it will be a GO desktop app which will be able to build different packages (deb, rpm, AppImage, flatpak) with one graphical interface.
 
