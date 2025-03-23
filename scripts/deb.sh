@@ -30,7 +30,24 @@ Maintainer: Spatulox
 Description: MyGes Native Desktop for Debian
 Section: utils
 Priority: optional
+Depends: libwebkit2gtk-4.0-37, libgtk-3-0
 EOF
+
+# Créer un script pre-installation
+cat <<EOF > "$debDir/preinst"
+#!/bin/bash
+set -e
+
+# Vérifier et installer les dépendances
+if ! dpkg -s libwebkit2gtk-4.0-37 libgtk-3-0 >/dev/null 2>&1; then
+    echo "Installation des dépendances nécessaires..."
+    apt-get update
+    apt-get install -y libwebkit2gtk-4.0-37 libgtk-3-0
+fi
+
+echo "Vérification des dépendances terminée."
+EOF
+chmod 755 "$debDir/preinst"
 
 # Créer le fichier .desktop pour le raccourci
 cat <<EOF > "$srcDir/usr/share/applications/$programName.desktop"
