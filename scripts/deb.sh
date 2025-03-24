@@ -30,8 +30,8 @@ Maintainer: Spatulox
 Description: MyGes Native Desktop for Debian
 Section: utils
 Priority: optional
-Depends: libwebkit2gtk-4.0-37, libgtk-3-0
 EOF
+#Depends: libwebkit2gtk-4.0-37, libgtk-3-0
 
 # Créer un script pre-installation
 cat <<EOF > "$debDir/preinst"
@@ -74,7 +74,7 @@ sudo chown -R root:root "$srcDir"
 
 # Construire le paquet Debian
 mkdir -p "$buildDir"
-dpkg-deb --build "$srcDir" "$buildDir/${programName}_${packageVersion}.deb"
+dpkg-deb --build "$srcDir" "$buildDir/${programName}_${packageVersion}_${architecture}.deb"
 
 # Nettoyer les permissions après la construction
 sudo chown -R $USER:$USER "$srcDir"
@@ -83,3 +83,6 @@ sudo chown -R $USER:$USER "$srcDir"
 rm -rf "$srcDir/usr" "$debDir"
 
 echo "Paquet créé : $buildDir/${programName}_${packageVersion}.deb"
+
+# Verif la qualité et la conformité du paquet :
+#lintian $buildDir/${programName}_${packageVersion}.deb
