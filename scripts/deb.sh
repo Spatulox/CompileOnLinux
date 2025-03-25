@@ -31,23 +31,6 @@ Description: MyGes Native Desktop for Debian
 Section: utils
 Priority: optional
 EOF
-#Depends: libwebkit2gtk-4.0-37, libgtk-3-0
-
-# Créer un script pre-installation
-cat <<EOF > "$debDir/preinst"
-#!/bin/bash
-set -e
-
-# Vérifier et installer les dépendances
-if ! dpkg -s libwebkit2gtk-4.0-37 libgtk-3-0 >/dev/null 2>&1; then
-    echo "Installation des dépendances nécessaires..."
-    apt-get update
-    apt-get install -y libwebkit2gtk-4.0-37 libgtk-3-0
-fi
-
-echo "Vérification des dépendances terminée."
-EOF
-chmod 755 "$debDir/preinst"
 
 # Créer le fichier .desktop pour le raccourci
 cat <<EOF > "$srcDir/usr/share/applications/$programName.desktop"
@@ -70,7 +53,11 @@ EOF
 chmod 755 "$debDir/postinst"
 
 # Changer les permissions pour root (nécessaire pour dpkg)
+sudo chmod -R 755 "$srcDir"
 sudo chown -R root:root "$srcDir"
+
+# Changer les permissions du dossier DEBIAN (important)
+sudo chmod 755 "$debDir"
 
 # Construire le paquet Debian
 mkdir -p "$buildDir"
@@ -80,7 +67,7 @@ dpkg-deb --build "$srcDir" "$buildDir/${programName}_${packageVersion}_${archite
 sudo chown -R $USER:$USER "$srcDir"
 
 # Nettoyage des fichiers temporaires (optionnel)
-rm -rf "$srcDir/usr" "$debDir"
+sudo rm -rf "$srcDir/usr" "$debDir"
 
 echo "Paquet créé : $buildDir/${programName}_${packageVersion}.deb"
 
